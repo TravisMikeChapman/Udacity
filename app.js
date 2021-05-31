@@ -23,25 +23,15 @@
 
     // Create Human Object
     var human = {}
-    var facts = {};
+    var facts = ["weight", "height", "diet", "where", "when", "fact"];
 
 
     // Use IIFE to get human data from form
-    function getData(){
-        human.name = document.getElementById('name').value;
-        human.height = parseInt(document.getElementById('feet').value * 12) + parseInt(document.getElementById('inches').value);
-        human.weight = document.getElementById('weight').value;
-        human.diet = document.getElementById('diet').value;
-        }
+
 
     document.getElementById('btn').addEventListener('click', getData, false);  //This works, but I'm wondering if there was a better way?
-
+    document.getElementById('btn').addEventListener('click', (function(){document.getElementById('dino-compare').innerHTML = ""}), false)
     // Create Dino Compare Method 1
-    function randomInt(max){
-        return Math.floor(Math.random() * max);
-    }
-    var randomDino = dinoArray[randomInt()];
-
     function weightDiff(dinoWeight, humanWeight){
         if(dinoWeight > humanWeight){
             return (dinoWeight - humanWeight)
@@ -62,20 +52,83 @@
     }
     
     // Create Dino Compare Method 3
-    if(randomDino3.diet == human.diet){
-        var dietDiff = true;
-    }else{
-        var dietDiff = {"dinodiet": randomDino3.diet, "humandiet": human.diet}
-    };
-
-    facts.push(weightDiff, heightDiff,dietDiff);
+    function dietDiff(dinoDiet, humanDiet){
+        if(dinoDiet.toLowerCase() == humanDiet.toLowerCase()){
+            return true;
+        }else{
+            return false;
+        };
+    }
 
 
     // Generate Tiles for each Dino in Array
-  
-        // Add tiles to DOM
+    function randomInt(max){
+        return Math.floor(Math.random() * max);
+    }
 
-    // Remove form from screen
+    function getData(){
+        human.name = document.getElementById('name').value;
+        human.height = parseInt(document.getElementById('feet').value * 12) + parseInt(document.getElementById('inches').value);
+        human.weight = document.getElementById('weight').value;
+        human.diet = document.getElementById('diet').value;
+        (function buildTiles() {
+            dinoGridArray = [];
+            for(i=0; i<8; i++){
+                var randomDino = dinoArray[randomInt(dinoArray.length)];
+                var randomFact = facts[randomInt(facts.length)];
+                var dinoObject = {};
+                dinoObject.name = randomDino.species;
+                dinoObject.img = `${randomDino.species}.png`;
+                dinoObject.factType = randomFact
 
+                if (randomFact == "weight"){
+                    var weightFact = weightDiff(human.weight, randomDino.weight)
+                    dinoObject.fact = `The difference in weight between you and ${randomDino.species} is ` + weightFact + ` pounds!`;
+                }else if(randomFact == "height"){
+                    var heightFact = weightDiff(human.height, randomDino.height)
+                    dinoObject.fact = `The difference in height between you and ${randomDino.species} is ` + heightFact + ` inches!`;
+                }else if (randomFact == "diet"){
+                    var dietFact = dietDiff(human.diet, randomDino.diet)
+                    if (dietFact == true){
+                        dinoObject.fact = `You and ${randomDino.species} have the same diet!`
+                    }else{
+                        dinoObject.fact = `You are a ${human.diet.toLowerCase()} while ${randomDino.species} is a ${randomDino.diet}`;
+                    }       
+                }else if (randomFact == "when"){
+                    dinoObject.fact = `${randomDino.species} lived during the ${randomDino.when}`
+                }else if (randomFact == "where"){
+                    dinoObject.fact = `${randomDino.species} lived on ${randomDino.where}`
+                }else{
+                    dinoObject.fact = randomDino[randomFact];
+                }
+                dinoGridArray.push(dinoObject);
+                dinoArray.splice(dinoArray.indexOf(randomDino), 1);
 
-// On button click, prepare and display infographic
+            }
+            console.log(dinoGridArray);
+        })()
+        
+        var grid = document.getElementById('grid');
+
+        dinoGridArray1 = [dinoGridArray[0], dinoGridArray[1], dinoGridArray[2], dinoGridArray[3]];
+        dinoGridArray2 = [dinoGridArray[4], dinoGridArray[5], dinoGridArray[6], dinoGridArray[7]];
+        console.log(dinoGridArray1);
+        console.log(dinoGridArray2);
+        dinoGridArray1.forEach(function(dinoItem){
+            var gridTile = document.createElement('div');
+            gridTile.classList.add('grid-item');
+            gridTile.innerHTML= `<h3>${dinoItem.name}</h3><p>${dinoItem.fact}</p><img src = "../images/${dinoItem.name}"> `
+            grid.appendChild(gridTile);
+        })
+        var gridTile = document.createElement('div');
+        gridTile.classList.add('grid-item');
+        gridTile.innerHTML= `<h3>${human.name}</h3><p>Look! it\'s you!</p><img src = ../images/human.png> `
+        grid.appendChild(gridTile);
+        dinoGridArray2.forEach(function(dinoItem){
+            var gridTile = document.createElement('div');
+            gridTile.classList.add('grid-item');
+            gridTile.innerHTML= `<h3>${dinoItem.name}</h3><p>${dinoItem.fact}</p><img src = "../images/${dinoItem.name}"> `
+            grid.appendChild(gridTile);
+        })
+    }
+
