@@ -108,15 +108,12 @@
                 dinoArray.splice(dinoArray.indexOf(randomDino), 1);
 
             }
-            console.log(dinoGridArray);
         })()
         
         var grid = document.getElementById('grid');
 
         dinoGridArray1 = [dinoGridArray[0], dinoGridArray[1], dinoGridArray[2], dinoGridArray[3]];
         dinoGridArray2 = [dinoGridArray[4], dinoGridArray[5], dinoGridArray[6], dinoGridArray[7]];
-        console.log(dinoGridArray1);
-        console.log(dinoGridArray2);
         dinoGridArray1.forEach(function(dinoItem){
             var gridTile = document.createElement('div');
             gridTile.classList.add('grid-item');
