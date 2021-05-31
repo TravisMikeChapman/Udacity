@@ -18,7 +18,7 @@
     let stegosaurus = new Dino('Stegosaurus', 11600, 79, 'herbivore', 'North America, Europe, and Asia', 'Late Jurassic - Early Cretaceous', 'The stegosaurus had 17-22 plates.');
     let elasmosaurus = new Dino('Elasmosaurus', 16000, 59, 'carnivore', 'North America', 'Late Cretaceous', 'Elasmosaurus was a marine reptile first discovered in Kansas.')
     let pteranodon = new Dino('Pteranodon', 44, 20, 'carnivore', 'North America', 'Late Cretaceous', 'The Pteranodon is technically not a dinosaur, but a type of flying reptile.')
-    let pigeon = new Dino('Pigeon', 0.5, 9, 'herbivore', 'world wide', 'holocene', 'All birds are living dinosaurs');
+    let pigeon = new Dino('Pigeon', 0.5, 9, 'herbivore', 'the whole world', 'holocene', 'All birds are living dinosaurs');
     let dinoArray = [triceratops, tyrannosaurusRex, anklyosaurus, brachiosaurus, stegosaurus, elasmosaurus, pteranodon, pigeon];
 
     // Create Human Object
@@ -30,7 +30,7 @@
 
 
     document.getElementById('btn').addEventListener('click', getData, false);  //This works, but I'm wondering if there was a better way?
-    document.getElementById('btn').addEventListener('click', (function(){document.getElementById('dino-compare').innerHTML = ""}), false)
+    document.getElementById('btn').addEventListener('click', (function(){document.getElementById('dino-compare').style.display = "none"}), false)
     // Create Dino Compare Method 1
     function weightDiff(dinoWeight, humanWeight){
         if(dinoWeight > humanWeight){
@@ -71,6 +71,9 @@
         human.height = parseInt(document.getElementById('feet').value * 12) + parseInt(document.getElementById('inches').value);
         human.weight = document.getElementById('weight').value;
         human.diet = document.getElementById('diet').value;
+        if(dinoArray.length == 0){
+            dinoArray = [triceratops, tyrannosaurusRex, anklyosaurus, brachiosaurus, stegosaurus, elasmosaurus, pteranodon, pigeon];
+        }
         (function buildTiles() {
             dinoGridArray = [];
             for(i=0; i<8; i++){
@@ -117,18 +120,44 @@
         dinoGridArray1.forEach(function(dinoItem){
             var gridTile = document.createElement('div');
             gridTile.classList.add('grid-item');
-            gridTile.innerHTML= `<h3>${dinoItem.name}</h3><p>${dinoItem.fact}</p><img src = "../images/${dinoItem.name}"> `
+            gridTile.innerHTML= `<h3>${dinoItem.name}</h3><p>${dinoItem.fact}</p><img src = "images/${dinoItem.img}"> `
             grid.appendChild(gridTile);
         })
         var gridTile = document.createElement('div');
         gridTile.classList.add('grid-item');
-        gridTile.innerHTML= `<h3>${human.name}</h3><p>Look! it\'s you!</p><img src = ../images/human.png> `
+        gridTile.innerHTML= `<h3>${human.name}</h3><p>Look! it\'s you!</p><img src = "images/human.png"> `
         grid.appendChild(gridTile);
         dinoGridArray2.forEach(function(dinoItem){
             var gridTile = document.createElement('div');
             gridTile.classList.add('grid-item');
-            gridTile.innerHTML= `<h3>${dinoItem.name}</h3><p>${dinoItem.fact}</p><img src = "../images/${dinoItem.name}"> `
+            gridTile.innerHTML= `<h3>${dinoItem.name}</h3><p>${dinoItem.fact}</p><img src = "images/${dinoItem.img}"> `
             grid.appendChild(gridTile);
         })
+
+        var refresh = document.createElement('div');
+        var text = document.createTextNode('Do Another Person!')
+        refresh.appendChild(text);
+        refresh.id = 'restart';
+        document.getElementById('grid').appendChild(refresh);
+
+        var moreFacts = document.createElement('div');
+        var text = document.createTextNode('Get More Facts!')
+        moreFacts.appendChild(text);
+        moreFacts.id = 'refresh';
+        document.getElementById('grid').appendChild(moreFacts);
+
+
+
+        //document.getElementById('refresh').addEventListener('click', (function(){document.getElementById('dino-compare').style.display = "block"}), false)
+        document.getElementById('refresh').addEventListener('click', (function(){document.getElementById('grid').innerHTML = ""}), false);
+        document.getElementById('refresh').addEventListener('click', getData, false);
+
+        document.getElementById('restart').addEventListener('click', (function(){document.getElementById('dino-compare').style.display = "block"}), false)
+        document.getElementById('restart').addEventListener('click', (function(){document.getElementById('grid').innerHTML = ""}), false)
+        //document.getElementById('restart').addEventListener('click', getData, false)
+
+        
+
     }
+
 
