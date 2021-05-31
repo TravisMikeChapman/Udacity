@@ -28,7 +28,6 @@
 
     // Use IIFE to get human data from form
 
-
     document.getElementById('btn').addEventListener('click', getData, false);  //This works, but I'm wondering if there was a better way?
     document.getElementById('btn').addEventListener('click', (function(){document.getElementById('dino-compare').style.display = "none"}), false)
     // Create Dino Compare Method 1
@@ -131,29 +130,26 @@
             grid.appendChild(gridTile);
         })
 
-        var refresh = document.createElement('div');
-        var text = document.createTextNode('Do Another Person!')
-        refresh.appendChild(text);
-        refresh.id = 'restart';
-        document.getElementById('grid').appendChild(refresh);
+        
+        let restart = document.createElement('div');
+        let restartButtonText = document.createTextNode('Do Another Person!');
+        restart.appendChild(restartButtonText);
+        restart.id = 'restart';
+        grid.appendChild(restart);
 
-        var moreFacts = document.createElement('div');
-        var text = document.createTextNode('Get More Facts!')
-        moreFacts.appendChild(text);
-        moreFacts.id = 'refresh';
-        document.getElementById('grid').appendChild(moreFacts);
+        let moreFacts = document.createElement('div');
+        let refreshButtonText = document.createTextNode('Get More Facts!');
+        moreFacts.appendChild(refreshButtonText);
+        moreFacts.id = 'moreFacts';
+        grid.appendChild(moreFacts);
 
 
 
-        //document.getElementById('refresh').addEventListener('click', (function(){document.getElementById('dino-compare').style.display = "block"}), false)
-        document.getElementById('refresh').addEventListener('click', (function(){document.getElementById('grid').innerHTML = ""}), false);
-        document.getElementById('refresh').addEventListener('click', getData, false);
+        document.getElementById('moreFacts').addEventListener('click', (function(){document.getElementById('grid').innerHTML = ""}), false);
+        document.getElementById('moreFacts').addEventListener('click', getData, false);
 
         document.getElementById('restart').addEventListener('click', (function(){document.getElementById('dino-compare').style.display = "block"}), false)
         document.getElementById('restart').addEventListener('click', (function(){document.getElementById('grid').innerHTML = ""}), false)
-        //document.getElementById('restart').addEventListener('click', getData, false)
-
-        
 
     }
 

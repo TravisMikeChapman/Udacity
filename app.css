@@ -162,7 +162,7 @@ select {
     transition: ease 0.3s all;
 }
 
-#refresh, #restart {
+#moreFacts, #restart {
     display: block;
     background: rgb(112 208 223);
     padding: 0.8em;
@@ -172,7 +172,7 @@ select {
 
 
 
-#btn:hover, #refresh:hover, #restart:hover {
+#btn:hover, #moreFacts:hover, #restart:hover {
     background: #777;
     color: #fff;
     cursor: pointer;
