@@ -22,14 +22,14 @@
     let dinoArray = [triceratops, tyrannosaurusRex, anklyosaurus, brachiosaurus, stegosaurus, elasmosaurus, pteranodon, pigeon];
 
     // Create Human Object
-    var human = {}
-    var facts = ["weight", "height", "diet", "where", "when", "fact"];
+    let human = {}
+    let facts = ["weight", "height", "diet", "where", "when", "fact"];
 
 
     // Use IIFE to get human data from form
-
-    document.getElementById('btn').addEventListener('click', getData, false);  //This works, but I'm wondering if there was a better way?
+    document.getElementById('btn').addEventListener('click', getData, false);
     document.getElementById('btn').addEventListener('click', (function(){document.getElementById('dino-compare').style.display = "none"}), false)
+    
     // Create Dino Compare Method 1
     function weightDiff(dinoWeight, humanWeight){
         if(dinoWeight > humanWeight){
@@ -65,6 +65,7 @@
         return Math.floor(Math.random() * max);
     }
 
+    //On submit, get user data and build grid.
     function getData(){
         human.name = document.getElementById('name').value;
         human.height = parseInt(document.getElementById('feet').value * 12) + parseInt(document.getElementById('inches').value);
@@ -76,21 +77,27 @@
         (function buildTiles() {
             dinoGridArray = [];
             for(i=0; i<8; i++){
-                var randomDino = dinoArray[randomInt(dinoArray.length)];
-                var randomFact = facts[randomInt(facts.length)];
-                var dinoObject = {};
+                let randomDino = dinoArray[randomInt(dinoArray.length)];
+                if (randomDino.species == 'Pigeon'){
+                    console.log('There is the pigeon.');
+                    var randomFact = facts[facts.length - 1];
+                }else{
+                    console.log(randomDino.species);
+                    var randomFact = facts[randomInt(facts.length)];
+                }
+                let dinoObject = {};
                 dinoObject.name = randomDino.species;
                 dinoObject.img = `${randomDino.species}.png`;
-                dinoObject.factType = randomFact
+                dinoObject.factType = randomFact;
 
                 if (randomFact == "weight"){
-                    var weightFact = weightDiff(human.weight, randomDino.weight)
+                    let weightFact = weightDiff(human.weight, randomDino.weight)
                     dinoObject.fact = `The difference in weight between you and ${randomDino.species} is ` + weightFact + ` pounds!`;
                 }else if(randomFact == "height"){
-                    var heightFact = weightDiff(human.height, randomDino.height)
+                    let heightFact = weightDiff(human.height, randomDino.height)
                     dinoObject.fact = `The difference in height between you and ${randomDino.species} is ` + heightFact + ` inches!`;
                 }else if (randomFact == "diet"){
-                    var dietFact = dietDiff(human.diet, randomDino.diet)
+                    let dietFact = dietDiff(human.diet, randomDino.diet)
                     if (dietFact == true){
                         dinoObject.fact = `You and ${randomDino.species} have the same diet!`
                     }else{
@@ -109,22 +116,22 @@
             }
         })()
         
-        var grid = document.getElementById('grid');
+        let grid = document.getElementById('grid');
 
         dinoGridArray1 = [dinoGridArray[0], dinoGridArray[1], dinoGridArray[2], dinoGridArray[3]];
         dinoGridArray2 = [dinoGridArray[4], dinoGridArray[5], dinoGridArray[6], dinoGridArray[7]];
         dinoGridArray1.forEach(function(dinoItem){
-            var gridTile = document.createElement('div');
+            let gridTile = document.createElement('div');
             gridTile.classList.add('grid-item');
             gridTile.innerHTML= `<h3>${dinoItem.name}</h3><p>${dinoItem.fact}</p><img src = "images/${dinoItem.img}"> `
             grid.appendChild(gridTile);
         })
-        var gridTile = document.createElement('div');
+        let gridTile = document.createElement('div');
         gridTile.classList.add('grid-item');
-        gridTile.innerHTML= `<h3>${human.name}</h3><p>Look! it\'s you!</p><img src = "images/human.png"> `
+        gridTile.innerHTML= `<h3>${human.name}</h3><img src = "images/human.png"> `
         grid.appendChild(gridTile);
         dinoGridArray2.forEach(function(dinoItem){
-            var gridTile = document.createElement('div');
+            let gridTile = document.createElement('div');
             gridTile.classList.add('grid-item');
             gridTile.innerHTML= `<h3>${dinoItem.name}</h3><p>${dinoItem.fact}</p><img src = "images/${dinoItem.img}"> `
             grid.appendChild(gridTile);
