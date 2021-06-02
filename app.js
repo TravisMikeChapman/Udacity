@@ -65,7 +65,7 @@
         return Math.floor(Math.random() * max);
     }
 
-    //On submit, get user data and build grid.
+    //On submit, get user data and build tiles, and then the grid.
     function getData(){
         human.name = document.getElementById('name').value;
         human.height = parseInt(document.getElementById('feet').value * 12) + parseInt(document.getElementById('inches').value);
@@ -74,16 +74,15 @@
         if(dinoArray.length == 0){
             dinoArray = [triceratops, tyrannosaurusRex, anklyosaurus, brachiosaurus, stegosaurus, elasmosaurus, pteranodon, pigeon];
         }
-        (function buildTiles() {
+        // Here we immediately build the tiles
+        (function buildTiles() { 
             dinoGridArray = [];
             for(i=0; i<8; i++){
                 let randomDino = dinoArray[randomInt(dinoArray.length)];
                 if (randomDino.species == 'Pigeon'){
-                    console.log('There is the pigeon.');
-                    var randomFact = facts[facts.length - 1];
+                    var randomFact = facts[facts.length - 1];  //using either 'let' or 'const' on this variable cause it to be undefined.
                 }else{
-                    console.log(randomDino.species);
-                    var randomFact = facts[randomInt(facts.length)];
+                    var randomFact = facts[randomInt(facts.length)]; //using either 'let' or 'const' on this variable cause it to be undefined.
                 }
                 let dinoObject = {};
                 dinoObject.name = randomDino.species;
@@ -120,44 +119,41 @@
 
         dinoGridArray1 = [dinoGridArray[0], dinoGridArray[1], dinoGridArray[2], dinoGridArray[3]];
         dinoGridArray2 = [dinoGridArray[4], dinoGridArray[5], dinoGridArray[6], dinoGridArray[7]];
-        dinoGridArray1.forEach(function(dinoItem){
-            let gridTile = document.createElement('div');
-            gridTile.classList.add('grid-item');
-            gridTile.innerHTML= `<h3>${dinoItem.name}</h3><p>${dinoItem.fact}</p><img src = "images/${dinoItem.img}"> `
-            grid.appendChild(gridTile);
-        })
-        let gridTile = document.createElement('div');
-        gridTile.classList.add('grid-item');
-        gridTile.innerHTML= `<h3>${human.name}</h3><img src = "images/human.png"> `
-        grid.appendChild(gridTile);
-        dinoGridArray2.forEach(function(dinoItem){
-            let gridTile = document.createElement('div');
-            gridTile.classList.add('grid-item');
-            gridTile.innerHTML= `<h3>${dinoItem.name}</h3><p>${dinoItem.fact}</p><img src = "images/${dinoItem.img}"> `
-            grid.appendChild(gridTile);
-        })
-
+        humanArray = [human];
         
-        let restart = document.createElement('div');
-        let restartButtonText = document.createTextNode('Do Another Person!');
-        restart.appendChild(restartButtonText);
-        restart.id = 'restart';
-        grid.appendChild(restart);
+    //Having put the information in tiles, we put them into an array to build the grid. It's broken up to ensure the human is in the middle.
+        function buildGrid(array) {
+            array.forEach(function(dinoItem){
+            let gridTile = document.createElement('div');
+            gridTile.classList.add('grid-item');
+            if (array.length == 1){
+                gridTile.innerHTML= `<h3>${human.name}</h3><img src = "images/human.png"> `
+            }else{
+                gridTile.innerHTML= `<h3>${dinoItem.name}</h3><p>${dinoItem.fact}</p><img src = "images/${dinoItem.img}"> `
+            }
+            grid.appendChild(gridTile);
+            })
+        }
+        
+        buildGrid(dinoGridArray1);
+        buildGrid(humanArray)
+        buildGrid(dinoGridArray2);
 
-        let moreFacts = document.createElement('div');
-        let refreshButtonText = document.createTextNode('Get More Facts!');
-        moreFacts.appendChild(refreshButtonText);
-        moreFacts.id = 'moreFacts';
-        grid.appendChild(moreFacts);
+        //A bit of an extra credit function that adds buttons to make it easier to restart or regenerate without having to refresh :)
+        function addButtons(id, buttonText) {
+            let div = document.createElement('div');
+            let divButtonText = document.createTextNode(buttonText);
+            div.appendChild(divButtonText);
+            div.id = id;
+            grid.appendChild(div);
+            document.getElementById(id).addEventListener('click', (function(){document.getElementById('grid').innerHTML = ""}), false);
+        }
+        
+        addButtons('restart', 'Do Another Person!')
+        addButtons('moreFacts', 'Get More Facts!')
 
-
-
-        document.getElementById('moreFacts').addEventListener('click', (function(){document.getElementById('grid').innerHTML = ""}), false);
         document.getElementById('moreFacts').addEventListener('click', getData, false);
-
         document.getElementById('restart').addEventListener('click', (function(){document.getElementById('dino-compare').style.display = "block"}), false)
-        document.getElementById('restart').addEventListener('click', (function(){document.getElementById('grid').innerHTML = ""}), false)
-
     }
 
 
